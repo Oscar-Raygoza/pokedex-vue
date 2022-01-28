@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <Pokedex test="teztss" msg="Welcome to Your Vue.js + TypeScript App" />
+    <Pokedex test="" msg="Welcome to Your Vue.js + TypeScript App" />
   </div>
 </template>
 
@@ -13,5 +13,5 @@ import Pokedex from "@/components/Pokedex.vue"; // @ is an alias to /src
     Pokedex,
   },
 })
-export default class Home extends Vue {}
+export default class PokeHome extends Vue {}
 </script>

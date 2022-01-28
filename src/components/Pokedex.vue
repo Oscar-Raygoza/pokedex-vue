@@ -1,39 +1,105 @@
 <template>
   <div class="pokedex">
     <div class="pokedex-left">
-      <div class="pokedex-left-top">
-        <div class="light is-sky is-big in-animated" />
-        <div class="light is-red" />
-        <div class="light is-yellow" />
-        <div class="light is-green" />
-      </div>
       <div class="pokedex-screen-container">
-        <pokedex-screen />
+        <pokedex-screen
+          v-bind:pokemon="pokemon"
+          v-bind:loading="loading"
+          v-bind:error="error"
+        />
       </div>
       <div class="pokedex-left-bottom">
-        <div class="pokedex-left-bottom-lights">
-          <div class="light is-blue is-medium" />
-          <div class="light is-green is-large" />
-          <div class="light is-orange is-large" />
-        </div>
-        <pokedex-form />
+        <pokedex-form v-on:submit="handleSubmit($event)" />
       </div>
     </div>
-    <div class="pokedex-right-front" />
-    <div class="pokedex-right-back" />
+    <div class="pokedex-right">
+      <h1>List</h1>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
+import PokedexScreen from "@/components/PokedexScreen.vue"; // @ is an alias to /src
+import PokedexForm from "@/components/PokedexForm.vue"; // @ is an alias to /src
 
-@Component
-export default class Pokedex extends Vue {
-  @Prop() private msg!: string;
-  @Prop() private test!: string;
-
-}
+@Component({
+  components: {
+    PokedexScreen,
+    PokedexForm,
+  },
+  data() {
+    return {
+      error: false,
+      loading: true,
+      pokemon: null,
+      pokemonId: Math.floor(Math.random() * 806 + 1).toString(),
+    };
+  },
+  methods: {
+    getPokemon() {
+      fetch(`https://pokeapi.co/api/v2/pokemon/${this.pokemonId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          this.pokemon = data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.error = true;
+          this.errorMessage = err.message;
+        });
+    },
+    handleSubmit(e: any) {
+      e.preventDefault();
+      this.loading = true;
+      this.error = false;
+      this.getPokemon();
+    },
+  },
+  created() {
+    this.getPokemon();
+  },
+})
+export default class Pokedex extends Vue {}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.pokedex {
+  background-color: #41ffab;
+  padding-top: 70px;
+  width: 100%;
+}
+.pokedex-left {
+  background-color: #ff1a55;
+  background-image: url("../assets/logo.png");
+  background-repeat: no-repeat;
+  background-position: 3% 97%;
+  width: 600px;
+  height: 850px;
+  margin: 0 auto;
+  border-radius: 10px;
+  text-align: center;
+  border: 10px solid #3d0f53;
+  box-shadow: 25px 30px #000;
+  display: inline-block;
+}
+.pokedex-right {
+  background-color: #ff1a55;
+  width: 600px;
+  height: 850px;
+  margin: -10px;
+  border-radius: 10px;
+  text-align: center;
+  border: 10px solid #3d0f53;
+  box-shadow: 25px 30px #000;
+  display: inline-block;
+  position: relative;
+  top: -420px;
+  transform: rotate3d(-2, 42, 0, 26deg);
+}
+.pokedex-screen-container {
+  padding-top: 20px;
+}
+</style>
