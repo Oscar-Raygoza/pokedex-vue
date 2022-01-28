@@ -2,7 +2,7 @@
   <div class="form container">
     <form
       class="form-control"
-      @submit.prevent="getPokemon"
+      @submit.prevent="search($event)"
       @keydown="form.onKeydown($event)"
     >
       <input
@@ -15,8 +15,8 @@
         v-if="form.errors.has('pockemonId')"
         v-html="form.errors.get('pockemonId')"
       />
-      <spam class="in-btn in-btn--tag"></spam>
-      <spam class="in-btn in-btn--tag secundary"></spam>
+      <span class="in-btn in-btn--tag"></span>
+      <span class="in-btn in-btn--tag secundary"></span>
       <input
         class="form-control in-btn in-btn--primary float-right"
         type="submit"
@@ -36,6 +36,17 @@ import Form from "vform";
     }),
   }),
   name: "PokedexForm",
+  methods: {
+    search(event) {
+      event.preventDefault();
+      const pokemonName = this.form.pokemonId;
+      console.log(pokemonName);
+      const newPokemonId = window.isNaN(parseInt(pokemonName))
+        ? pokemonName.toLowerCase()
+        : pokemonName;
+      this.$emit("submit", newPokemonId);
+    },
+  },
 })
 export default class PokedexScreen extends Vue {}
 </script>

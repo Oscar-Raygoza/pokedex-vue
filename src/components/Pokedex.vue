@@ -13,7 +13,11 @@
       </div>
     </div>
     <div class="pokedex-right">
-      <h1>List</h1>
+      <stats
+        v-bind:pokemon="pokemon"
+        v-bind:loading="loading"
+        v-bind:error="error"
+      />
     </div>
   </div>
 </template>
@@ -22,11 +26,12 @@
 import { Component, Vue } from "vue-property-decorator";
 import PokedexScreen from "@/components/PokedexScreen.vue"; // @ is an alias to /src
 import PokedexForm from "@/components/PokedexForm.vue"; // @ is an alias to /src
-
+import Stats from "@/components/Stats.vue"; // @ is an alias
 @Component({
   components: {
     PokedexScreen,
     PokedexForm,
+    Stats,
   },
   data() {
     return {
@@ -50,11 +55,15 @@ import PokedexForm from "@/components/PokedexForm.vue"; // @ is an alias to /src
           this.errorMessage = err.message;
         });
     },
-    handleSubmit(e: any) {
-      e.preventDefault();
-      this.loading = true;
-      this.error = false;
-      this.getPokemon();
+    handleSubmit(pokemonId) {
+      if (pokemonId !== "") {
+        this.error = false;
+        this.loading = true;
+        this.pokemonId = pokemonId;
+        this.getPokemon();
+        return;
+      }
+      this.error = true;
     },
   },
   created() {
@@ -70,6 +79,7 @@ export default class Pokedex extends Vue {}
   background-color: #41ffab;
   padding-top: 70px;
   width: 100%;
+  height: 100vh;
 }
 .pokedex-left {
   background-color: #ff1a55;
@@ -95,8 +105,6 @@ export default class Pokedex extends Vue {}
   border: 10px solid #3d0f53;
   box-shadow: 25px 30px #000;
   display: inline-block;
-  position: relative;
-  top: -420px;
   transform: rotate3d(-2, 42, 0, 26deg);
 }
 .pokedex-screen-container {

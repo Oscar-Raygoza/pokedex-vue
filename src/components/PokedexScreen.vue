@@ -1,36 +1,27 @@
 <template>
   <div class="screen">
-    <template>
-      <div class="pokedex-screen">
+    <div class="pokedex-screen">
+      <img
+        v-if="error"
+        src="../assets/glitch-static.gif"
+        class="pokedex-no-screen"
+      />
+      <img
+        v-else-if="loading"
+        src="../assets/glitch-static.gif"
+        class="pokedex-no-screen"
+      />
+      <div class="pokemon-info" v-else>
+        <h2 class="pokemon-name">
+          Hola <b>{{ pokemon.name }}!</b>
+        </h2>
         <img
-          v-if="error"
-          src="../assets/glitch-static.gif"
-          class="pokedex-no-screen"
+          class="pokemon-img"
+          v-bind:src="pokemon.sprites.other.home.front_default"
+          v-bind:alt="pokemon.name"
         />
-        <img
-          v-else-if="loading"
-          src="../assets/glitch-static.gif"
-          class="pokedex-no-screen"
-        />
-        <div class="pokemon-info" v-else>
-          <h2 class="pokemon-name">
-            Hola <b>{{ pokemon.name }}!</b>
-          </h2>
-          <img
-            class="pokemon-img"
-            v-bind:src="pokemon.sprites.front_default"
-            v-bind:alt="pokemon.name"
-          />
-          <ul class="pokemon-stats">
-            <Stat
-              v-bind:item="item"
-              v-for="item in pokemon.stats"
-              v-bind:key="item.stat.name"
-            />
-          </ul>
-        </div>
       </div>
-    </template>
+    </div>
   </div>
 </template>
 
@@ -83,13 +74,13 @@ export default class PokedexScreen extends Vue {
     font-size: 2em;
     margin-bottom: 10px;
     text-align: right;
-    margin: 20px;
+    margin: 5px;
     font-weight: bold;
     font-family: "Roboto Mono", monospace;
   }
   > img {
     width: 300px;
-    height: 300px;
+    height: auto;
   }
 }
 </style>
