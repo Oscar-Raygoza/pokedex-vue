@@ -33,44 +33,52 @@ import Stats from "@/components/Stats.vue"; // @ is an alias
     PokedexForm,
     Stats,
   },
-  data() {
+})
+export default class Pokedex extends Vue {
+  private error = false;
+  private loading = true;
+  private pokemon = [];
+  private pokemonId = Math.floor(Math.random() * 806 + 1).toString();
+  private errorMessage = [];
+
+  data(): any {
     return {
       error: false,
       loading: true,
       pokemon: null,
       pokemonId: Math.floor(Math.random() * 806 + 1).toString(),
     };
-  },
-  methods: {
-    getPokemon() {
-      fetch(`https://pokeapi.co/api/v2/pokemon/${this.pokemonId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          this.pokemon = data;
-          this.loading = false;
-        })
-        .catch((err) => {
-          this.loading = false;
-          this.error = true;
-          this.errorMessage = err.message;
-        });
-    },
-    handleSubmit(pokemonId) {
-      if (pokemonId !== "") {
-        this.error = false;
-        this.loading = true;
-        this.pokemonId = pokemonId;
-        this.getPokemon();
-        return;
-      }
-      this.error = true;
-    },
-  },
+  }
+
+  private async getPokemon() {
+    fetch(`https://pokeapi.co/api/v2/pokemon/${this.pokemonId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        this.pokemon = data;
+        this.loading = false;
+      })
+      .catch((err) => {
+        this.loading = false;
+        this.error = true;
+        this.errorMessage = err.message;
+      });
+  }
+
+  private async handleSubmit(pokemonId: string) {
+    if (pokemonId !== "") {
+      this.error = false;
+      this.loading = true;
+      this.pokemonId = pokemonId;
+      this.getPokemon();
+      return;
+    }
+    this.error = true;
+  }
+
   created() {
     this.getPokemon();
-  },
-})
-export default class Pokedex extends Vue {}
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -84,6 +92,7 @@ export default class Pokedex extends Vue {}
 .pokedex-left {
   background-color: #ff1a55;
   background-image: url("../assets/logo.png");
+  background-size: 150px;
   background-repeat: no-repeat;
   background-position: 3% 97%;
   width: 600px;

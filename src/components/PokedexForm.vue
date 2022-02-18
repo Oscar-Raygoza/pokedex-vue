@@ -29,26 +29,32 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import Form from "vform";
+
 @Component({
-  data: () => ({
-    form: new Form({
-      pokemonId: "",
-    }),
-  }),
   name: "PokedexForm",
-  methods: {
-    search(event) {
-      event.preventDefault();
-      const pokemonName = this.form.pokemonId;
-      console.log(pokemonName);
-      const newPokemonId = window.isNaN(parseInt(pokemonName))
-        ? pokemonName.toLowerCase()
-        : pokemonName;
-      this.$emit("submit", newPokemonId);
-    },
-  },
 })
-export default class PokedexScreen extends Vue {}
+export default class PokedexScreen extends Vue {
+  private form = {
+    pokemonId: "",
+  };
+  data(): any {
+    return {
+      form: new Form({
+        pokemonId: "",
+      }),
+    };
+  }
+
+  private async search(event: any) {
+    event.preventDefault();
+    const pokemonName = this.form.pokemonId;
+    console.log(pokemonName);
+    const newPokemonId = window.isNaN(parseInt(pokemonName))
+      ? pokemonName.toLowerCase()
+      : pokemonName;
+    this.$emit("submit", newPokemonId);
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -81,6 +87,7 @@ export default class PokedexScreen extends Vue {}
     height: 60px;
     text-transform: uppercase;
     padding: 0 50px;
+    display: inherit;
     transition: margin 0.15s ease-in-out;
   }
   &--primary:focus {
