@@ -1,4 +1,7 @@
-# pokedex-vue
+# ⚡ Pokedex Vue ⚡ <a href="https://oscar-raygoza.github.io/pokedex-vue/">Preview</a>
+![](docs/App.png)
+![](docs/Search-Function.png)
+
 
 ## Project setup
 ```
